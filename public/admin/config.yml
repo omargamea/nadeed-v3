@@ -1,102 +1,11 @@
-backend:
+﻿backend:
   name: github
-  repo: "omargamea/nadeed"
-    branch: main
-
-# ── الوسائط ──────────────────────────────────────
-media_folder: "public/uploads"
-public_folder: "/uploads"
-
-# ── إعدادات اللغة ────────────────────────────────
-locale: 'ar'
-
-# ── المجموعات ─────────────────────────────────────
-collections:
-
-  # ── مقالات ────────────────────────────────────
-  - name: "articles"
-    label: "المقالات"
-    label_singular: "مقال"
-    folder: "src/content/articles"
-    create: true
-    slug: "{{slug}}"
-    extension: "md"
-    format: "frontmatter"
-    fields:
-      - label: "العنوان"
-        name: "title"
-        widget: "string"
-        hint: "عنوان المقال كاملاً"
-
-      - label: "الوصف"
-        name: "description"
-        widget: "text"
-        hint: "وصف قصير للمقال (يُستخدم في SEO والبطاقة)"
-
-      - label: "المؤلف"
-        name: "author"
-        widget: "string"
-
-      - label: "التصنيف"
-        name: "category"
-        widget: "select"
-        options:
-          - { label: "مقالات", value: "مقالات" }
-          - { label: "فكر", value: "فكر" }
-          - { label: "نقد", value: "نقد" }
-          - { label: "أدب", value: "أدب" }
-          - { label: "ثقافة", value: "ثقافة" }
-          - { label: "نشر", value: "نشر" }
-
-      - label: "تاريخ النشر"
-        name: "publishedAt"
-        widget: "datetime"
-        format: "YYYY-MM-DD"
-        date_format: "YYYY-MM-DD"
-        time_format: false
-
-      - label: "تاريخ التحديث"
-        name: "updatedAt"
-        widget: "datetime"
-        format: "YYYY-MM-DD"
-        date_format: "YYYY-MM-DD"
-        time_format: false
-        required: false
-
-      - label: "صورة مميزة"
-        name: "featuredImage"
-        widget: "image"
-        required: false
-        hint: "صورة رئيسية للمقال (اختياري)"
-
-      - label: "مسودة"
-        name: "draft"
-        widget: "boolean"
-        default: false
-        hint: "عند التفعيل لن يُنشر المقال في الموقع"
-
-      - label: "المحتوى"
-        name: "body"
-        widget: "markdown"
-
-  # ── إصدارات / كتب ─────────────────────────────
-  - name: "books"
-    label: "الإصدارات"
-    label_singular: "إصدار"
-    folder: "src/content/books"
-    create: true
-    slug: "{{slug}}"
-    extension: "md"
-    format: "frontmatter"
-    fields:
-      - label: "عنوان الإصدار"
-        name: "title"
+  repo: name: "title"  repo: "omargamea/nadeed"
         widget: "string"
 
       - label: "الوصف"
         name: "description"
         widget: "text"
-        hint: "وصف قصير يُعرض في البطاقة وصفحة الإصدار"
 
       - label: "المؤلف"
         name: "author"
@@ -138,7 +47,6 @@ collections:
         name: "isbn"
         widget: "string"
         required: false
-        hint: "الرقم الدولي للكتاب (اختياري)"
 
       - label: "مسودة"
         name: "draft"
@@ -149,7 +57,6 @@ collections:
         name: "body"
         widget: "markdown"
 
-  # ── مؤلفون ────────────────────────────────────
   - name: "authors"
     label: "المؤلفون"
     label_singular: "مؤلف"
@@ -166,12 +73,10 @@ collections:
       - label: "الدور / التخصص"
         name: "role"
         widget: "string"
-        hint: "مثال: روائي، شاعرة، ناقد أدبي"
 
       - label: "نبذة تعريفية"
         name: "bio"
         widget: "text"
-        hint: "سيرة ذاتية مختصرة (تُعرض في البطاقة وصفحة المؤلف)"
 
       - label: "صورة المؤلف"
         name: "image"
@@ -187,9 +92,7 @@ collections:
         name: "body"
         widget: "markdown"
         required: false
-        hint: "أعمال، إصدارات، مقالات إضافية — اختياري"
 
-  # ── مجلة نضيد ─────────────────────────────────
   - name: "magazine"
     label: "مجلة نضيد"
     label_singular: "عدد"
@@ -233,4 +136,3 @@ collections:
       - label: "محتوى العدد"
         name: "body"
         widget: "markdown"
-        hint: "محتوى صفحة العدد الكاملة — مقالات، أقسام، تفاصيل"
