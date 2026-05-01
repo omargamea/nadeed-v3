@@ -1,0 +1,24 @@
+---
+// src/layouts/PageLayout.astro
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  tag?: string;
+}
+
+const { title, description, tag = 'نضيد' } = Astro.props;
+---
+
+<BaseLayout title={`${title} — نضيد`} description={description}>
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <span class="nd-page-tag">{tag}</span>
+      <h1 class="nd-page-title">{title}</h1>
+    </div>
+  </div>
+  <div class="nd-page-body">
+    <slot />
+  </div>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+// src/components/AuthorCard.astro
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  author: CollectionEntry<'authors'>;
+}
+
+const { author } = Astro.props;
+const { name, role, bio, image } = author.data;
+const initials = name.split(' ').slice(0, 2).map((w: string) => w[0]).join('.');
+const shortBio = bio.length > 80 ? bio.substring(0, 80) + '...' : bio;
+---
+
+<a href={`/authors/${author.slug}/`} class="nd-author-card">
+  <div class="nd-author-init">
+    {image
+      ? <img src={image} alt={name} />
+      : <span aria-hidden="true">{initials}</span>
+    }
+  </div>
+  <p class="nd-author-role">{role}</p>
+  <h3 class="nd-author-name">{name}</h3>
+  <p class="nd-author-bio-short">{shortBio}</p>
+</a>

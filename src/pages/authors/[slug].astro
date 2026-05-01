@@ -1,0 +1,59 @@
+---
+// src/pages/authors/[slug].astro
+import AuthorLayout from '../../layouts/AuthorLayout.astro';
+import BookCard from '../../components/BookCard.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const authors = await getCollection('authors', e => !e.data.draft);
+  return authors.map(author => ({
+    params: { slug: author.slug },
+    props:  { author },
+  }));
+}
+
+interface Props {
+  author: CollectionEntry<'authors'>;
+}
+
+const { author }  = Astro.props;
+const { Content }  = await author.render();
+
+// Find related content by author name
+const authorName = author.data.name;
+const allBooks    = await getCollection('books',    e => !e.data.draft && e.data.author === authorName);
+const allArticles = await getCollection('articles', e => !e.data.draft && e.data.author === authorName);
+---
+
+<AuthorLayout author={author}>
+  <Content />
+</AuthorLayout>
+
+{/* Related books */}
+{allBooks.length > 0 && (
+  <section class="nd-section alt">
+    <div class="nd-container">
+      <div class="nd-sec-hd">
+        <h2 class="nd-sec-title">إصدارات <em>{authorName}</em></h2>
+      </div>
+      <div class="nd-posts-grid">
+        {allBooks.map(book => <BookCard book={book} />)}
+      </div>
+    </div>
+  </section>
+)}
+
+{/* Related articles */}
+{allArticles.length > 0 && (
+  <section class="nd-section">
+    <div class="nd-container">
+      <div class="nd-sec-hd">
+        <h2 class="nd-sec-title">مقالات <em>{authorName}</em></h2>
+      </div>
+      <div class="nd-posts-grid">
+        {allArticles.map(article => <ArticleCard article={article} />)}
+      </div>
+    </div>
+  </section>
+)}

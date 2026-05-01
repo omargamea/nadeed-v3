@@ -1,0 +1,45 @@
+---
+// src/components/BookCard.astro
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  book: CollectionEntry<'books'>;
+}
+
+const { book } = Astro.props;
+const { title, description, author, category, coverImage } = book.data;
+
+// Deterministic cover colors based on category
+const coverColors: Record<string, [string, string]> = {
+  'رواية':       ['#2D4A3E', '#1A2E26'],
+  'قصة قصيرة':  ['#4A2D35', '#2E1A20'],
+  'شعر':         ['#2D374A', '#1A2130'],
+  'فكر':         ['#3A2D4A', '#231A2E'],
+  'نقد':         ['#2A4040', '#182626'],
+  'معرفة':       ['#4A3A2D', '#2E241A'],
+};
+const [c1, c2] = coverColors[category] ?? ['#2D2D2D', '#1A1A1A'];
+---
+
+<a href={`/books/${book.slug}/`} class="nd-book-card" aria-label={`إصدار: ${title}`}>
+  <div class="nd-book-cover">
+    {coverImage
+      ? <img src={coverImage} alt={`غلاف: ${title}`} loading="lazy" />
+      : (
+        <div class="nd-book-cover-ph" style={`background:linear-gradient(150deg,${c1},${c2})`}>
+          <span class="bc-cat">{category}</span>
+          <span class="bc-title">{title}</span>
+          <span class="bc-rule"></span>
+          <span class="bc-auth">{author}</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="nd-book-body">
+    <p class="nd-book-cat">{category}</p>
+    <h3 class="nd-book-title">{title}</h3>
+    <p class="nd-book-author">{author}</p>
+    <p class="nd-book-desc">{description}</p>
+    <span class="nd-book-cta">تفاصيل الإصدار ←</span>
+  </div>
+</a>

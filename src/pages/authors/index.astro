@@ -1,0 +1,43 @@
+---
+// src/pages/authors/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AuthorCard from '../../components/AuthorCard.astro';
+import { getCollection } from 'astro:content';
+
+const authors = await getCollection('authors', e => !e.data.draft);
+---
+
+<BaseLayout
+  title="المؤلفون — نضيد"
+  description="مؤلفو نضيد — أصوات أدبية وفكرية تجمعها دار الأدب والفكر والمعرفة."
+>
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <span class="nd-page-tag">نضيد</span>
+      <h1 class="nd-page-title">المؤلفون</h1>
+    </div>
+  </div>
+
+  <section class="nd-section">
+    <div class="nd-container">
+      {authors.length > 0
+        ? (
+          <>
+            <p style="color:var(--ink-soft);max-width:65ch;margin-bottom:2.5rem;line-height:1.85;font-family:var(--fa);font-size:17px">
+              أصوات مستقلة تجمعها نضيد لأنها تؤمن بأن الكتاب يستحق القارئ، والقارئ يستحق الكاتب الجريء.
+            </p>
+            <div class="nd-authors-grid">
+              {authors.map(author => <AuthorCard author={author} />)}
+            </div>
+          </>
+        )
+        : (
+          <div class="nd-empty">
+            <p class="nd-empty-icon" aria-hidden="true">🖊️</p>
+            <p>لا توجد صفحات مؤلفين منشورة بعد.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

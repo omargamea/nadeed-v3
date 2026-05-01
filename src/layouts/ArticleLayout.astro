@@ -1,0 +1,74 @@
+---
+// src/layouts/ArticleLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const { title, description, author, category, publishedAt, featuredImage } = article.data;
+
+const formattedDate = new Intl.DateTimeFormat('ar-EG', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+}).format(new Date(publishedAt));
+---
+
+<BaseLayout
+  title={`${title} — نضيد`}
+  description={description}
+  ogImage={featuredImage}
+  ogType="article"
+>
+  <!-- Article Hero -->
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <nav class="nd-breadcrumb" aria-label="مسار التنقل">
+        <a href="/">الرئيسية</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="/articles/">المقالات</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span>{title}</span>
+      </nav>
+      <p class="nd-post-hero-eyebrow" style="font-family:var(--fe);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem">
+        <span style="display:inline-block;width:20px;height:1px;background:var(--gold);flex-shrink:0"></span>
+        {category}
+      </p>
+      <h1 class="nd-page-title">{title}</h1>
+      <div class="nd-post-hero-meta">
+        <span class="nd-post-hero-label">{category}</span>
+        <time class="nd-post-hero-time" datetime={publishedAt.toISOString()}>{formattedDate}</time>
+        <span class="nd-post-hero-time">·</span>
+        <span class="nd-post-hero-time">{author}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Image -->
+  {featuredImage && (
+    <div class="nd-post-featured">
+      <img src={featuredImage} alt={title} loading="eager" />
+    </div>
+  )}
+
+  <!-- Body -->
+  <div class="nd-reading-wrap">
+    <article class="nd-body-prose">
+      <slot />
+    </article>
+
+    <!-- Labels -->
+    <div class="nd-post-labels">
+      <span class="nd-label-lbl">التصنيف:</span>
+      <a href={`/articles/?category=${encodeURIComponent(category)}`} class="nd-label-chip">{category}</a>
+    </div>
+
+    <!-- Back -->
+    <div style="text-align:center; margin-top:2.5rem;">
+      <a href="/articles/" class="nd-btn-primary">← جميع المقالات</a>
+    </div>
+  </div>
+</BaseLayout>

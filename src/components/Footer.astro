@@ -1,0 +1,62 @@
+---
+// src/components/Footer.astro
+const year = new Date().getFullYear();
+---
+
+<footer class="nd-footer" role="contentinfo">
+  <div class="nd-footer-top">
+
+    <!-- Brand -->
+    <div class="nd-footer-brand">
+      <span class="nd-f-logo">نَضِيد</span>
+      <span class="nd-f-tag">لِلْحَرْفِ قَدَر</span>
+      <p class="nd-f-desc">دار الأدب والفكر والمعرفة — إصدارات راقية في الأدب والفكر والنقد والشعر.</p>
+      <a href="mailto:nadeed.pub@outlook.com" class="nd-f-email" dir="ltr">nadeed.pub@outlook.com</a>
+    </div>
+
+    <!-- الأدب -->
+    <div class="nd-footer-col">
+      <h4>الأدب</h4>
+      <ul class="nd-footer-links">
+        <li><a href="/books/?category=رواية">رواية</a></li>
+        <li><a href="/books/?category=قصة قصيرة">قصة قصيرة</a></li>
+        <li><a href="/books/?category=شعر">شعر</a></li>
+        <li><a href="/books/">كل الإصدارات</a></li>
+      </ul>
+    </div>
+
+    <!-- نضيد -->
+    <div class="nd-footer-col">
+      <h4>نضيد</h4>
+      <ul class="nd-footer-links">
+        <li><a href="/">الرئيسية</a></li>
+        <li><a href="/articles/">المقالات</a></li>
+        <li><a href="/magazine/">مجلة نضيد</a></li>
+        <li><a href="/authors/">المؤلفون</a></li>
+      </ul>
+    </div>
+
+    <!-- تواصل -->
+    <div class="nd-footer-col">
+      <h4>تواصل</h4>
+      <ul class="nd-footer-links">
+        <li><a href="/shuroot/">شروط النشر</a></li>
+        <li><a href="/about/">عن نضيد</a></li>
+        <li><a href="/contact/">اتصل بنا</a></li>
+        <li><a href="mailto:nadeed.pub@outlook.com" dir="ltr" style="font-size:11.5px">nadeed.pub@outlook.com</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="nd-footer-bottom">
+    <p class="nd-f-copy">
+      &copy; {year} NADEED &middot; نضيد — دار الأدب والفكر والمعرفة. جميع الحقوق محفوظة.
+    </p>
+    <nav class="nd-footer-legal" aria-label="روابط قانونية">
+      <a href="/about/">عن نضيد</a>
+      <a href="/shuroot/">شروط النشر</a>
+      <a href="/contact/">اتصل بنا</a>
+    </nav>
+  </div>
+</footer>

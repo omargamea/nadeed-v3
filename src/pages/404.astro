@@ -1,0 +1,28 @@
+---
+// src/pages/404.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="الصفحة غير موجودة — نضيد"
+  description="الصفحة التي تبحث عنها غير موجودة في موقع نضيد."
+  noindex={true}
+>
+  <div style="text-align:center;padding:8rem 2rem;min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center">
+    <p style="font-family:var(--fa);font-size:80px;color:var(--parchment);margin-bottom:1rem;line-height:1">
+      ٤٠٤
+    </p>
+    <h1 style="font-family:var(--fa);font-size:28px;color:var(--ink);margin-bottom:.8rem;font-weight:400">
+      الصفحة غير موجودة
+    </h1>
+    <p style="color:var(--ink-faint);font-size:15px;margin-bottom:2.5rem;max-width:40ch;line-height:1.75">
+      ربما تم نقل هذه الصفحة أو حذفها، أو ربما الرابط غير صحيح.
+    </p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center">
+      <a href="/" class="nd-btn-primary">← العودة للرئيسية</a>
+      <a href="/articles/" class="nd-btn-ghost" style="border-color:var(--parchment);color:var(--ink-soft)">
+        المقالات
+      </a>
+    </div>
+  </div>
+</BaseLayout>

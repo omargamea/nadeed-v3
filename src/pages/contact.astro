@@ -1,0 +1,59 @@
+---
+// src/pages/contact.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="اتصل بنا — نضيد"
+  description="تواصل مع نضيد — دار الأدب والفكر والمعرفة. nadeed.pub@outlook.com"
+>
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <span class="nd-page-tag">نضيد</span>
+      <h1 class="nd-page-title">اتصل بنا</h1>
+    </div>
+  </div>
+
+  <div class="nd-container" style="padding-top:3.5rem;padding-bottom:5rem">
+    <div class="nd-contact-card">
+      <h2>تواصل مع نضيد</h2>
+      <p>
+        نرحب بتواصلكم في أي من الشؤون التالية:
+        الاستفسار عن الإصدارات، إرسال مخطوطة،
+        التعاون الثقافي والإعلامي، أو أي استفسار عام.
+      </p>
+
+      <a
+        href="mailto:nadeed.pub@outlook.com"
+        class="nd-contact-email"
+        dir="ltr"
+      >
+        nadeed.pub@outlook.com
+      </a>
+
+      <p style="font-size:13px;color:var(--ink-faint);margin-bottom:1.8rem">
+        نسعى للرد على جميع الرسائل خلال 72 ساعة من استلامها.
+      </p>
+
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="/shuroot/" class="nd-btn-primary">شروط النشر ←</a>
+        <a
+          href="mailto:nadeed.pub@outlook.com?subject=استفسار عام"
+          class="nd-btn-ghost"
+          style="border-color:var(--parchment);color:var(--ink-soft)"
+        >
+          راسلنا الآن
+        </a>
+      </div>
+    </div>
+
+    <!-- Additional info -->
+    <div style="max-width:540px;margin:2.5rem auto 0;text-align:center">
+      <p style="font-size:13.5px;color:var(--ink-faint);line-height:1.85">
+        لإرسال مخطوطة للنشر، يُرجى الاطلاع على
+        <a href="/shuroot/" style="color:var(--red)">شروط النشر</a>
+        أولاً وإرفاق الملفات المطلوبة مع رسالتك.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

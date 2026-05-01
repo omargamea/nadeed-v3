@@ -1,0 +1,58 @@
+---
+// src/layouts/AuthorLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  author: CollectionEntry<'authors'>;
+}
+
+const { author } = Astro.props;
+const { name, role, bio, image } = author.data;
+const initials = name.split(' ').slice(0, 2).map((w: string) => w[0]).join('.');
+---
+
+<BaseLayout
+  title={`${name} — مؤلفو نضيد`}
+  description={bio.substring(0, 160)}
+  ogImage={image}
+>
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <nav class="nd-breadcrumb" aria-label="مسار التنقل">
+        <a href="/">الرئيسية</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="/authors/">المؤلفون</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span>{name}</span>
+      </nav>
+    </div>
+  </div>
+
+  <div class="nd-section">
+    <div class="nd-container">
+      <div style="max-width:900px;margin:0 auto">
+
+        <div class="nd-author-hero-card">
+          <div class="nd-author-init-lg">
+            {image
+              ? <img src={image} alt={name} />
+              : <span>{initials}</span>
+            }
+          </div>
+          <div class="nd-author-bio">
+            <h1>{name}</h1>
+            <span class="nd-author-role-lbl">{role}</span>
+            <p>{bio}</p>
+          </div>
+        </div>
+
+        <!-- Additional content from markdown body -->
+        <article class="nd-body-prose">
+          <slot />
+        </article>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>

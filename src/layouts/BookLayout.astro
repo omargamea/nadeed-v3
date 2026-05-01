@@ -1,0 +1,111 @@
+---
+// src/layouts/BookLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  book: CollectionEntry<'books'>;
+}
+
+const { book } = Astro.props;
+const { title, description, author, category, year, coverImage, status, isbn } = book.data;
+
+const statusLabel: Record<string, string> = {
+  available:    'متاح',
+  'coming-soon': 'قريباً',
+  unavailable:  'غير متاح حالياً',
+};
+---
+
+<BaseLayout
+  title={`${title} — إصدارات نضيد`}
+  description={description}
+  ogImage={coverImage}
+>
+  <!-- Dark hero for dark background breadcrumb -->
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <nav class="nd-breadcrumb" aria-label="مسار التنقل">
+        <a href="/">الرئيسية</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="/books/">الإصدارات</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span>{title}</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Book Layout -->
+  <div class="nd-container">
+    <div class="nd-book-layout">
+
+      <!-- Cover + Inquiry -->
+      <div class="nd-book-cover-sticky">
+        <div class="nd-book-cover" style="height:290px;border-radius:6px;overflow:hidden">
+          {coverImage
+            ? <img src={coverImage} alt={`غلاف كتاب: ${title}`} style="width:100%;height:100%;object-fit:cover" />
+            : (
+              <div class="nd-book-cover-ph" style={`background:linear-gradient(150deg,#2D4A3E,#1A2E26);width:200px;height:280px;`}>
+                <span class="bc-cat">{category}</span>
+                <span class="bc-title">{title}</span>
+                <span class="bc-rule"></span>
+                <span class="bc-auth">{author}</span>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="nd-book-price-box">
+          <a
+            href={`mailto:nadeed.pub@outlook.com?subject=استفسار عن إصدار: ${encodeURIComponent(title)}`}
+            class="nd-book-inquiry"
+          >
+            للاستفسار عن الإصدار
+          </a>
+          <p class="nd-book-inquiry-note">nadeed.pub@outlook.com</p>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="nd-book-info">
+        <p style="font-family:var(--fe);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dk);margin-bottom:.6rem">{category} · نضيد</p>
+        <h1 style="font-family:var(--fa);font-size:clamp(26px,3.8vw,46px);font-weight:400;color:var(--ink);line-height:1.28;margin-bottom:.5rem">{title}</h1>
+        <p style="font-size:15px;color:var(--ink-soft);margin-bottom:1.2rem">
+          بقلم <strong style="color:var(--ink)">{author}</strong>
+        </p>
+
+        <div class="nd-book-details-row">
+          <div class="nd-book-det">
+            <span class="nd-book-det-lbl">التصنيف</span>
+            <span class="nd-book-det-val">{category}</span>
+          </div>
+          <div class="nd-book-det">
+            <span class="nd-book-det-lbl">سنة النشر</span>
+            <span class="nd-book-det-val">{year}</span>
+          </div>
+          <div class="nd-book-det">
+            <span class="nd-book-det-lbl">الدار</span>
+            <span class="nd-book-det-val">نضيد</span>
+          </div>
+          {isbn && (
+            <div class="nd-book-det">
+              <span class="nd-book-det-lbl">ISBN</span>
+              <span class="nd-book-det-val" dir="ltr" style="font-family:var(--fe)">{isbn}</span>
+            </div>
+          )}
+          <div class="nd-book-det">
+            <span class="nd-book-det-lbl">الحالة</span>
+            <span class={`nd-book-status-chip ${status}`}>{statusLabel[status] ?? status}</span>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem">
+          <h2 style="font-family:var(--fa);font-size:20px;font-weight:700;margin-bottom:.8rem;color:var(--ink)">عن الإصدار</h2>
+          <article class="nd-body-prose">
+            <slot />
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

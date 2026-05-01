@@ -1,0 +1,39 @@
+---
+// src/components/ArticleCard.astro
+import type { CollectionEntry } from 'astro:content';
+
+export interface Props {
+  article: CollectionEntry<'articles'>;
+}
+
+const { article } = Astro.props;
+const { title, description, author, category, publishedAt, featuredImage } = article.data;
+
+const formattedDate = new Intl.DateTimeFormat('ar-EG', {
+  year: 'numeric', month: 'long', day: 'numeric',
+}).format(new Date(publishedAt));
+---
+
+<article class="nd-post-card">
+  <a href={`/articles/${article.slug}/`} aria-hidden="true" tabindex="-1">
+    {featuredImage
+      ? <div class="nd-post-img"><img src={featuredImage} alt="" loading="lazy" /></div>
+      : <div class="nd-post-img-ph">نضيد</div>
+    }
+  </a>
+  <div class="nd-post-body">
+    <p class="nd-post-cat">{category}</p>
+    <h2 class="nd-post-title">
+      <a href={`/articles/${article.slug}/`}>{title}</a>
+    </h2>
+    <p class="nd-post-excerpt">{description}</p>
+    <div class="nd-post-meta">
+      <span>{author}</span>
+      <span class="nd-dot" aria-hidden="true"></span>
+      <time datetime={publishedAt.toISOString()}>{formattedDate}</time>
+    </div>
+    <a href={`/articles/${article.slug}/`} class="nd-read-more" aria-label={`اقرأ المقال: ${title}`}>
+      اقرأ المقال ←
+    </a>
+  </div>
+</article>

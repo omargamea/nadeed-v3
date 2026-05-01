@@ -1,0 +1,129 @@
+---
+// src/pages/articles/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles', e => !e.data.draft);
+const sorted = allArticles.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const categories = ['الكل', 'مقالات', 'فكر', 'نقد', 'أدب', 'ثقافة', 'نشر'];
+---
+
+<BaseLayout
+  title="المقالات — نضيد"
+  description="مقالات في الأدب والفكر والنقد والثقافة — نضيد دار الأدب والفكر والمعرفة."
+>
+  <!-- Page Hero -->
+  <div class="nd-page-hero">
+    <div class="nd-page-hero-inner">
+      <span class="nd-page-tag">نضيد</span>
+      <h1 class="nd-page-title">المقالات</h1>
+    </div>
+  </div>
+
+  <section class="nd-section">
+    <div class="nd-container">
+
+      <!-- Category filter (CSS-only, JS-enhanced) -->
+      <div class="nd-cats-bar" id="catsBar" role="group" aria-label="تصفية حسب التصنيف">
+        {categories.map((cat, i) => (
+          <button
+            class={`nd-cat-btn${i === 0 ? ' active' : ''}`}
+            data-cat={cat}
+            type="button"
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {sorted.length > 0
+        ? (
+          <div class="nd-posts-grid" id="articlesGrid">
+            {sorted.map(a => (
+              <div class="nd-article-item" data-category={a.data.category}>
+                <ArticleCard article={a} />
+              </div>
+            ))}
+          </div>
+        )
+        : (
+          <div class="nd-empty">
+            <p class="nd-empty-icon" aria-hidden="true">✍️</p>
+            <p>لا توجد مقالات منشورة بعد.</p>
+          </div>
+        )
+      }
+
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nd-cats-bar {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .nd-cat-btn {
+    padding: .44rem 1rem;
+    border-radius: 30px;
+    border: 1px solid var(--parchment);
+    font-size: 13px;
+    font-family: var(--fu);
+    color: var(--ink-soft);
+    background: var(--white);
+    cursor: pointer;
+    transition: all var(--ease);
+  }
+  .nd-cat-btn:hover,
+  .nd-cat-btn.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: var(--white);
+  }
+  .nd-article-item { display: contents; }
+  .nd-article-item[hidden] { display: none; }
+</style>
+
+<script>
+  const bar   = document.getElementById('catsBar')!;
+  const items = document.querySelectorAll<HTMLElement>('.nd-article-item');
+  const grid  = document.getElementById('articlesGrid')!;
+
+  bar.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.nd-cat-btn');
+    if (!btn) return;
+
+    // Update active state
+    bar.querySelectorAll('.nd-cat-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cat = btn.dataset.cat ?? 'الكل';
+
+    let visible = 0;
+    items.forEach(item => {
+      const match = cat === 'الكل' || item.dataset.category === cat;
+      item.hidden = !match;
+      if (match) visible++;
+    });
+
+    // Empty state
+    let emptyEl = grid.querySelector<HTMLElement>('.nd-filter-empty');
+    if (visible === 0) {
+      if (!emptyEl) {
+        emptyEl = document.createElement('div');
+        emptyEl.className = 'nd-filter-empty nd-empty';
+        emptyEl.innerHTML = `<p>لا توجد مقالات في تصنيف "${cat}".</p>`;
+        grid.appendChild(emptyEl);
+      }
+    } else {
+      emptyEl?.remove();
+    }
+  });
+</script>

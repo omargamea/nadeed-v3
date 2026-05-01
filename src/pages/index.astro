@@ -1,0 +1,223 @@
+---
+// src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import BookCard from '../components/BookCard.astro';
+import MagazineCard from '../components/MagazineCard.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch published entries only
+const allArticles = await getCollection('articles', e => !e.data.draft);
+const allBooks    = await getCollection('books',    e => !e.data.draft);
+const allAuthors  = await getCollection('authors',  e => !e.data.draft);
+const allMagazine = await getCollection('magazine', e => !e.data.draft);
+
+// Sort
+const latestArticles = allArticles
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 6);
+
+const latestBooks = allBooks.slice(0, 4);
+const latestMagazine = allMagazine
+  .sort((a, b) => b.data.issueNumber - a.data.issueNumber)
+  .slice(0, 4);
+const featuredAuthors = allAuthors.slice(0, 6);
+---
+
+<BaseLayout
+  title="نضيد — دار الأدب والفكر والمعرفة"
+  description="نضيد — دار الأدب والفكر والمعرفة. إصدارات راقية في الأدب والفكر والنقد والشعر. لِلْحَرْفِ قَدَر."
+>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="nd-hero" aria-label="نضيد — دار الأدب والفكر والمعرفة">
+    <div class="nd-hero-inner">
+      <p class="nd-hero-eyebrow">NADEED · Literature · Thought · Knowledge</p>
+      <h1 class="nd-hero-title">
+        نَضِيد
+        <em>دار الأدب والفكر والمعرفة</em>
+      </h1>
+      <p class="nd-hero-tagline">لِلْحَرْفِ قَدَر</p>
+      <p class="nd-hero-desc">
+        إصدارات راقية في الأدب والفكر والنقد والشعر — دار تؤمن بأن للحرف قدراً يستحق أن يُصان.
+      </p>
+      <div class="nd-hero-btns">
+        <a href="/books/" class="nd-btn-primary">تصفّح الإصدارات ←</a>
+        <a href="/magazine/" class="nd-btn-ghost">مجلة نضيد</a>
+      </div>
+
+      <div class="nd-hero-stats">
+        <div class="nd-stat">
+          <span class="nd-stat-num">{allBooks.length || '—'}</span>
+          <span class="nd-stat-lbl">إصدار</span>
+        </div>
+        <div class="nd-stat">
+          <span class="nd-stat-num">{allArticles.length || '—'}</span>
+          <span class="nd-stat-lbl">مقال</span>
+        </div>
+        <div class="nd-stat">
+          <span class="nd-stat-num">{allMagazine.length || '—'}</span>
+          <span class="nd-stat-lbl">عدد مجلة</span>
+        </div>
+        <div class="nd-stat">
+          <span class="nd-stat-num">{allAuthors.length || '—'}</span>
+          <span class="nd-stat-lbl">مؤلف</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LITERATURE TILES ═══ -->
+  <section class="nd-section">
+    <div class="nd-container">
+      <div class="nd-sec-hd">
+        <h2 class="nd-sec-title">أدب <em>نضيد</em></h2>
+        <a href="/books/" class="nd-sec-more">كل الإصدارات ←</a>
+      </div>
+      <div class="nd-lit-grid">
+        <a href="/books/?category=رواية" class="nd-lit-tile">
+          <div class="nd-lit-top" style="background:linear-gradient(135deg,#2D4A3E,#1A2E26)">رواية</div>
+          <div class="nd-lit-body">
+            <h3 class="nd-lit-title">الرواية</h3>
+            <p class="nd-lit-text">نغوص في عوالم السرد الطويل — روايات تتتبع الإنسان في لحظات تحوّله الكبرى وتسائل العالم من حوله.</p>
+          </div>
+        </a>
+        <a href="/books/?category=قصة قصيرة" class="nd-lit-tile">
+          <div class="nd-lit-top" style="background:linear-gradient(135deg,#4A2D35,#2E1A20)">قصة</div>
+          <div class="nd-lit-body">
+            <h3 class="nd-lit-title">القصة القصيرة</h3>
+            <p class="nd-lit-text">فن التكثيف واللحظة الخاطفة — قصص تُمسك بما يفرّ من الكلام الطويل وتحوّل تفصيلة واحدة إلى كون.</p>
+          </div>
+        </a>
+        <a href="/books/?category=شعر" class="nd-lit-tile">
+          <div class="nd-lit-top" style="background:linear-gradient(135deg,#2D374A,#1A2130)">شعر</div>
+          <div class="nd-lit-body">
+            <h3 class="nd-lit-title">الشعر</h3>
+            <p class="nd-lit-text">ديوان العرب ونافذة الروح — من القصيدة العمودية إلى قصيدة النثر، كل صوت يحمل بصمة أصيلة.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LATEST ARTICLES ═══ -->
+  <section class="nd-section alt">
+    <div class="nd-container">
+      <div class="nd-sec-hd">
+        <h2 class="nd-sec-title">آخر <em>المقالات</em></h2>
+        <a href="/articles/" class="nd-sec-more">كل المقالات ←</a>
+      </div>
+      {latestArticles.length > 0
+        ? (
+          <div class="nd-posts-grid">
+            {latestArticles.map(a => <ArticleCard article={a} />)}
+          </div>
+        )
+        : (
+          <div class="nd-empty">
+            <p class="nd-empty-icon" aria-hidden="true">✍️</p>
+            <p>لا توجد مقالات منشورة بعد.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ═══ MAGAZINE STRIP ═══ -->
+  {latestMagazine.length > 0 && (
+    <div class="nd-mag-strip">
+      <div class="nd-mag-inner nd-container">
+        <div>
+          <div class="nd-mag-logo-row">
+            <span class="nd-mag-logo-ar">مجلة نضيد</span>
+            <span class="nd-mag-logo-en">NADEED REVIEW</span>
+          </div>
+          <p class="nd-mag-desc">
+            منبر ثقافي يجمع أعمق الكتابات في الأدب والفكر والنقد — بأصوات حصرية وأسئلة تُطرح لأول مرة.
+          </p>
+          <a href="/magazine/" class="nd-mag-cta">تصفّح المجلة ←</a>
+        </div>
+        <div class="nd-mag-list">
+          {latestMagazine.map(issue => (
+            <a href={`/magazine/${issue.slug}/`} class="nd-mag-item">
+              <p class="nd-mag-item-cat" style="direction:ltr">
+                ISSUE {String(issue.data.issueNumber).padStart(2,'0')}
+              </p>
+              <p class="nd-mag-item-title">{issue.data.title}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )}
+
+  <!-- ═══ LATEST BOOKS ═══ -->
+  <section class="nd-section">
+    <div class="nd-container">
+      <div class="nd-sec-hd">
+        <h2 class="nd-sec-title">أحدث <em>الإصدارات</em></h2>
+        <a href="/books/" class="nd-sec-more">كل الإصدارات ←</a>
+      </div>
+      {latestBooks.length > 0
+        ? (
+          <div class="nd-posts-grid">
+            {latestBooks.map(b => <BookCard book={b} />)}
+          </div>
+        )
+        : (
+          <div class="nd-empty">
+            <p class="nd-empty-icon" aria-hidden="true">📚</p>
+            <p>لا توجد إصدارات منشورة بعد.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- ═══ THOUGHT & CRITICISM ═══ -->
+  {allArticles.filter(a => a.data.category === 'فكر' || a.data.category === 'نقد').length > 0 && (
+    <section class="nd-section alt">
+      <div class="nd-container">
+        <div class="nd-sec-hd">
+          <h2 class="nd-sec-title">فكر <em>ونقد</em></h2>
+          <a href="/articles/?category=فكر" class="nd-sec-more">المزيد ←</a>
+        </div>
+        <div class="nd-posts-grid">
+          {allArticles
+            .filter(a => a.data.category === 'فكر' || a.data.category === 'نقد')
+            .slice(0, 3)
+            .map(a => <ArticleCard article={a} />)
+          }
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ═══ AUTHORS ═══ -->
+  {featuredAuthors.length > 0 && (
+    <section class="nd-section">
+      <div class="nd-container">
+        <div class="nd-sec-hd">
+          <h2 class="nd-sec-title">مؤلفو <em>نضيد</em></h2>
+          <a href="/authors/" class="nd-sec-more">جميع المؤلفين ←</a>
+        </div>
+        <div class="nd-authors-grid">
+          {featuredAuthors.map(a => <AuthorCard author={a} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ═══ SHUROOT CTA ═══ -->
+  <div class="nd-cta-strip">
+    <div class="nd-cta-inner">
+      <div>
+        <h2 class="nd-cta-title">هل لديك عمل يستحق أن يُنشر؟</h2>
+        <p class="nd-cta-sub">نقرأ كل مخطوطة بعناية تامة — نبحث عن الصوت الفريد الذي لا يشبه أحداً غيره.</p>
+      </div>
+      <a href="/shuroot/" class="nd-cta-btn">شروط النشر ←</a>
+    </div>
+  </div>
+
+</BaseLayout>

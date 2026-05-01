@@ -1,0 +1,49 @@
+---
+// src/components/Seo.astro
+// SEO component — NADEED v3
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const siteUrl = import.meta.env.SITE || Astro.site?.toString() || '';
+const canonicalUrl = canonical || Astro.url.href;
+const fullOgImage = ogImage
+  ? (ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`)
+  : `${siteUrl}/assets/og-default.png`;
+---
+
+<!-- Primary -->
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex ? <meta name="robots" content="noindex,nofollow" /> : <meta name="robots" content="index,follow" />}
+<link rel="canonical" href={canonicalUrl} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:locale" content="ar_AR" />
+<meta property="og:site_name" content="نضيد" />
+{ogImage && <meta property="og:image" content={fullOgImage} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={fullOgImage} />}

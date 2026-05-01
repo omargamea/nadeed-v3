@@ -1,0 +1,122 @@
+---
+// src/components/Header.astro
+const currentPath = Astro.url.pathname;
+
+function isActive(path: string): boolean {
+  if (path === '/') return currentPath === '/';
+  return currentPath.startsWith(path);
+}
+---
+
+<!-- TOP BAR -->
+<div class="nd-topbar">
+  <div>دار الأدب والفكر والمعرفة</div>
+  <div class="nd-topbar-left">
+    <a href="mailto:nadeed.pub@outlook.com" dir="ltr">nadeed.pub@outlook.com</a>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nd-nav" role="navigation" aria-label="القائمة الرئيسية">
+  <div class="nd-nav-inner">
+
+    <!-- Logo -->
+    <a href="/" class="nd-logo" aria-label="نضيد — الصفحة الرئيسية">
+      <svg width="36" height="32" viewBox="0 0 100 88" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="ndClip">
+            <path d="M0,0 L100,0 L100,86 L68,86 Q50,42 32,86 L0,86 Z"/>
+          </clipPath>
+        </defs>
+        <rect x="1" y="18" width="49" height="68" fill="#1A1916" clip-path="url(#ndClip)"/>
+        <rect x="50" y="18" width="49" height="68" fill="#8B1A1A" clip-path="url(#ndClip)"/>
+        <path d="M50,18 Q33,2 9,7"   stroke="rgba(255,255,255,.85)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <path d="M50,18 Q31,6 7,13"  stroke="rgba(255,255,255,.52)" stroke-width="2"   fill="none" stroke-linecap="round"/>
+        <path d="M50,18 Q30,11 6,20" stroke="rgba(255,255,255,.26)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+        <path d="M50,18 Q67,2 91,7"  stroke="rgba(255,255,255,.7)"  stroke-width="2.8" fill="none" stroke-linecap="round"/>
+        <path d="M50,18 Q69,6 93,13" stroke="rgba(255,255,255,.42)" stroke-width="2"   fill="none" stroke-linecap="round"/>
+        <path d="M50,18 Q70,11 94,20" stroke="rgba(255,255,255,.2)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="nd-logo-text">
+        <span class="nd-logo-ar">نَضِيد</span>
+        <span class="nd-logo-sub">دار الأدب والفكر والمعرفة</span>
+      </div>
+    </a>
+
+    <!-- Desktop Menu -->
+    <ul class="nd-menu">
+      <li><a href="/"           aria-current={isActive('/') ? 'page' : undefined}>الرئيسية</a></li>
+      <li><a href="/articles/"  aria-current={isActive('/articles') ? 'page' : undefined}>المقالات</a></li>
+      <li><a href="/books/"     aria-current={isActive('/books') ? 'page' : undefined}>الإصدارات</a></li>
+      <li><a href="/magazine/"  class="nd-nav-mag" aria-current={isActive('/magazine') ? 'page' : undefined}>مجلة نضيد</a></li>
+      <li><a href="/authors/"   aria-current={isActive('/authors') ? 'page' : undefined}>المؤلفون</a></li>
+      <li><a href="/shuroot/"   aria-current={isActive('/shuroot') ? 'page' : undefined}>شروط النشر</a></li>
+      <li><a href="/about/"     aria-current={isActive('/about') ? 'page' : undefined}>عن نضيد</a></li>
+      <li><a href="/contact/"   aria-current={isActive('/contact') ? 'page' : undefined}>اتصل بنا</a></li>
+    </ul>
+
+    <!-- Right Actions -->
+    <div class="nd-nav-right">
+      <a href="/shuroot/" class="nd-btn-nav-primary">شروط النشر</a>
+      <button
+        class="nd-toggle"
+        id="ndToggle"
+        aria-label="فتح القائمة"
+        aria-expanded="false"
+        aria-controls="ndDrawer"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER OVERLAY -->
+<div class="nd-overlay" id="ndOverlay" aria-hidden="true"></div>
+
+<!-- MOBILE DRAWER -->
+<nav class="nd-drawer" id="ndDrawer" aria-label="القائمة المتنقلة">
+  <div class="nd-drawer-hd">
+    <span class="nd-drawer-brand">نَضِيد</span>
+    <button class="nd-drawer-close" id="ndDrawerClose" aria-label="إغلاق القائمة">✕</button>
+  </div>
+  <a href="/">الرئيسية</a>
+  <a href="/articles/">المقالات</a>
+  <a href="/books/">الإصدارات</a>
+  <a href="/magazine/" class="nd-nav-mag">مجلة نضيد</a>
+  <a href="/authors/">المؤلفون</a>
+  <a href="/about/">عن نضيد</a>
+  <a href="/contact/">اتصل بنا</a>
+  <a href="/shuroot/" class="nd-drawer-cta">شروط النشر ←</a>
+</nav>
+
+<script>
+  const toggle  = document.getElementById('ndToggle')!;
+  const drawer  = document.getElementById('ndDrawer')!;
+  const overlay = document.getElementById('ndOverlay')!;
+  const closeBtn = document.getElementById('ndDrawerClose')!;
+
+  function open() {
+    drawer.classList.add('on');
+    overlay.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    toggle.setAttribute('aria-expanded', 'true');
+    overlay.removeAttribute('aria-hidden');
+  }
+  function close() {
+    drawer.classList.remove('on');
+    overlay.classList.remove('on');
+    document.body.style.overflow = '';
+    toggle.setAttribute('aria-expanded', 'false');
+    overlay.setAttribute('aria-hidden', 'true');
+  }
+
+  toggle.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', close);
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer.classList.contains('on')) close();
+  });
+</script>

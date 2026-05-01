@@ -1,0 +1,45 @@
+---
+// src/pages/magazine/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MagazineCard from '../../components/MagazineCard.astro';
+import { getCollection } from 'astro:content';
+
+const issues = await getCollection('magazine', e => !e.data.draft);
+const sorted  = issues.sort((a, b) => b.data.issueNumber - a.data.issueNumber);
+---
+
+<BaseLayout
+  title="مجلة نضيد — دار الأدب والفكر والمعرفة"
+  description="مجلة نضيد الثقافية — منبر يجمع أعمق الكتابات في الأدب والفكر والنقد بأصوات حصرية."
+>
+  <!-- Dark hero matching magazine feel -->
+  <div class="nd-mag-strip" style="padding:3.5rem 0">
+    <div class="nd-container">
+      <div class="nd-mag-logo-row">
+        <span class="nd-mag-logo-ar">مجلة نضيد</span>
+        <span class="nd-mag-logo-en">NADEED REVIEW</span>
+      </div>
+      <p class="nd-mag-desc" style="max-width:60ch">
+        منبر ثقافي يجمع أعمق الكتابات في الأدب والفكر والنقد — بأصوات حصرية وأسئلة تُطرح لأول مرة.
+      </p>
+    </div>
+  </div>
+
+  <section class="nd-section">
+    <div class="nd-container">
+      {sorted.length > 0
+        ? (
+          <div class="nd-posts-grid">
+            {sorted.map(issue => <MagazineCard issue={issue} />)}
+          </div>
+        )
+        : (
+          <div class="nd-empty">
+            <p class="nd-empty-icon" aria-hidden="true">📖</p>
+            <p>لا توجد أعداد منشورة بعد.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
