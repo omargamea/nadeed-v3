@@ -11,8 +11,8 @@
 
 backend:
   name: github
-  repo: omargamea/nadeed     # TODO: استبدل باسم المستخدم/اسم المستودع
-  branch: main
+  repo: omargamea/nadeed
+    branch: main
   base_url: OAUTH_PROXY_URL                   # TODO: استبدل برابط OAuth proxy
 
 # ── الوسائط ──────────────────────────────────────
