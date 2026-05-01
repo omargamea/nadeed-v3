@@ -2,6 +2,9 @@
   name: github
   repo: "omargamea/nadeed"
   branch: "main"
+  site_domain: "nadeed.vercel.app"
+  base_url: "https://nadeed.vercel.app/api"
+  auth_endpoint: "auth"
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
