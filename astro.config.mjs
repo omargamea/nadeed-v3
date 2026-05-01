@@ -6,7 +6,7 @@
 
 import { defineConfig } from 'astro/config';
 
-const SITE_URL = process.env.SITE_URL || 'https://nadeed-v3.vercel.app';
+const SITE_URL = process.env.SITE_URL || 'https://nadeed.vercel.app';
 
 export default defineConfig({
   site: SITE_URL,
