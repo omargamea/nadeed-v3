@@ -17,7 +17,7 @@
 ```js
 const SITE_URL = process.env.SITE_URL || 'https://nadeed.vercel.app';
 ```
-- [ ] استبدل `https://nadeed-v3.vercel.app` بدومين الموقع الفعلي بعد معرفته
+- [ ] استبدل `https://nadeed.vercel.app` بدومين الموقع الفعلي بعد معرفته
 
 ### 3. ضبط Decap CMS
 في ملف `public/admin/config.yml`:
