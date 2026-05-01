@@ -11,7 +11,7 @@
 
 backend:
   name: github
-  repo: GITHUB_USERNAME/GITHUB_REPO_NAME      # TODO: استبدل باسم المستخدم/اسم المستودع
+  repo: omargamea/nadeed     # TODO: استبدل باسم المستخدم/اسم المستودع
   branch: main
   base_url: OAUTH_PROXY_URL                   # TODO: استبدل برابط OAuth proxy
 
