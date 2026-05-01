@@ -2,7 +2,6 @@ backend:
   name: github
   repo: omargamea/nadeed
     branch: main
-  base_url: OAUTH_PROXY_URL                   # TODO: استبدل برابط OAuth proxy
 
 # ── الوسائط ──────────────────────────────────────
 media_folder: "public/uploads"
