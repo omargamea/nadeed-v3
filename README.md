@@ -15,7 +15,7 @@
 ### 2. ضبط SITE_URL
 في ملف `astro.config.mjs`، السطر:
 ```js
-const SITE_URL = process.env.SITE_URL || 'https://nadeed-v3.vercel.app';
+const SITE_URL = process.env.SITE_URL || 'https://nadeed.vercel.app';
 ```
 - [ ] استبدل `https://nadeed-v3.vercel.app` بدومين الموقع الفعلي بعد معرفته
 
