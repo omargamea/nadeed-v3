@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: omargamea/nadeed
+  repo: "omargamea/nadeed"
     branch: main
 
 # ── الوسائط ──────────────────────────────────────
