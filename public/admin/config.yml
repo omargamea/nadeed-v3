@@ -1,65 +1,102 @@
 ﻿backend:
   name: github
-  repo: name: "title"  repo: "omargamea/nadeed"
-        widget: "string"
+  repo: "omargamea/nadeed"
+  branch: "main"
 
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+locale: "ar"
+
+collections:
+  - name: "articles"
+    label: "المقالات"
+    folder: "src/content/articles"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - label: "العنوان"
+        name: "title"
+        widget: "string"
       - label: "الوصف"
         name: "description"
         widget: "text"
-
       - label: "المؤلف"
         name: "author"
         widget: "string"
-
       - label: "التصنيف"
         name: "category"
-        widget: "select"
-        options:
-          - { label: "رواية", value: "رواية" }
-          - { label: "قصة قصيرة", value: "قصة قصيرة" }
-          - { label: "شعر", value: "شعر" }
-          - { label: "فكر", value: "فكر" }
-          - { label: "نقد", value: "نقد" }
-          - { label: "معرفة", value: "معرفة" }
+        widget: "string"
+      - label: "تاريخ النشر"
+        name: "publishedAt"
+        widget: "datetime"
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: "صورة مميزة"
+        name: "featuredImage"
+        widget: "image"
+        required: false
+      - label: "مسودة"
+        name: "draft"
+        widget: "boolean"
+        default: false
+      - label: "المحتوى"
+        name: "body"
+        widget: "markdown"
 
+  - name: "books"
+    label: "الإصدارات"
+    folder: "src/content/books"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - label: "عنوان الإصدار"
+        name: "title"
+        widget: "string"
+      - label: "الوصف"
+        name: "description"
+        widget: "text"
+      - label: "المؤلف"
+        name: "author"
+        widget: "string"
+      - label: "التصنيف"
+        name: "category"
+        widget: "string"
       - label: "سنة النشر"
         name: "year"
         widget: "number"
         value_type: "int"
-        min: 2000
-        max: 2100
-
       - label: "صورة الغلاف"
         name: "coverImage"
         widget: "image"
         required: false
-
       - label: "حالة الإصدار"
         name: "status"
         widget: "select"
         default: "available"
         options:
-          - { label: "متاح", value: "available" }
-          - { label: "قريباً", value: "coming-soon" }
-          - { label: "غير متاح حالياً", value: "unavailable" }
-
+          - "available"
+          - "coming-soon"
+          - "unavailable"
       - label: "ISBN"
         name: "isbn"
         widget: "string"
         required: false
-
       - label: "مسودة"
         name: "draft"
         widget: "boolean"
         default: false
-
-      - label: "المحتوى / نبذة عن الإصدار"
+      - label: "المحتوى"
         name: "body"
         widget: "markdown"
 
   - name: "authors"
     label: "المؤلفون"
-    label_singular: "مؤلف"
     folder: "src/content/authors"
     create: true
     slug: "{{slug}}"
@@ -69,25 +106,20 @@
       - label: "الاسم الكامل"
         name: "name"
         widget: "string"
-
-      - label: "الدور / التخصص"
+      - label: "الدور"
         name: "role"
         widget: "string"
-
       - label: "نبذة تعريفية"
         name: "bio"
         widget: "text"
-
       - label: "صورة المؤلف"
         name: "image"
         widget: "image"
         required: false
-
       - label: "مسودة"
         name: "draft"
         widget: "boolean"
         default: false
-
       - label: "محتوى إضافي"
         name: "body"
         widget: "markdown"
@@ -95,7 +127,6 @@
 
   - name: "magazine"
     label: "مجلة نضيد"
-    label_singular: "عدد"
     folder: "src/content/magazine"
     create: true
     slug: "{{slug}}"
@@ -105,34 +136,27 @@
       - label: "عنوان العدد"
         name: "title"
         widget: "string"
-
       - label: "رقم العدد"
         name: "issueNumber"
         widget: "number"
         value_type: "int"
-        min: 1
-
       - label: "وصف العدد"
         name: "description"
         widget: "text"
-
       - label: "تاريخ النشر"
         name: "publishedAt"
         widget: "datetime"
         format: "YYYY-MM-DD"
         date_format: "YYYY-MM-DD"
         time_format: false
-
       - label: "صورة الغلاف"
         name: "coverImage"
         widget: "image"
         required: false
-
       - label: "مسودة"
         name: "draft"
         widget: "boolean"
         default: false
-
-      - label: "محتوى العدد"
+      - label: "المحتوى"
         name: "body"
         widget: "markdown"
