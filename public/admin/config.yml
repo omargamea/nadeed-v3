@@ -3,7 +3,7 @@
 # نضيد — دار الأدب والفكر والمعرفة
 #
 # TODO قبل الإطلاق — استبدل القيم التالية:
-#   repo:     GITHUB_USERNAME/GITHUB_REPO_NAME
+#   repo:     omargamea/nadeed
 #   base_url: رابط OAuth proxy (مثال: https://nadeed-oauth.vercel.app)
 #             يمكن استخدام: https://github.com/vencax/netlify-cms-github-oauth-provider
 #             أو: https://github.com/Decap-CMS/netlify-cms-oauth-provider-node
