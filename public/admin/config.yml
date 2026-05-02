@@ -1,4 +1,4 @@
-﻿backend:
+backend:
   name: github
   repo: "omargamea/nadeed-v3"
   branch: "main"
@@ -13,6 +13,10 @@ locale: "ar"
 collections:
   - name: "articles"
     label: "المقالات"
+    label_singular: "مقال"
+    identifier_field: "title"
+    summary: "{{title}} - {{category}}"
+    sortable_fields: ["publishedAt", "title", "category"]
     folder: "src/content/articles"
     create: true
     slug: "{{slug}}"
@@ -30,7 +34,15 @@ collections:
         widget: "string"
       - label: "التصنيف"
         name: "category"
-        widget: "string"
+        widget: "select"
+        default: "أدب"
+        options:
+          - "مقالات"
+          - "فكر"
+          - "نقد"
+          - "أدب"
+          - "ثقافة"
+          - "نشر"
       - label: "تاريخ النشر"
         name: "publishedAt"
         widget: "datetime"
