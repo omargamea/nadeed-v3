@@ -63,6 +63,10 @@ collections:
 
   - name: "books"
     label: "الإصدارات"
+    label_singular: "إصدار"
+    identifier_field: "title"
+    summary: "{{title}} - {{author}} - {{year}}"
+    sortable_fields: ["year", "title", "author", "category", "status"]
     folder: "src/content/books"
     create: true
     slug: "{{slug}}"
@@ -80,7 +84,15 @@ collections:
         widget: "string"
       - label: "التصنيف"
         name: "category"
-        widget: "string"
+        widget: "select"
+        default: "معرفة"
+        options:
+          - "رواية"
+          - "قصة قصيرة"
+          - "شعر"
+          - "فكر"
+          - "نقد"
+          - "معرفة"
       - label: "سنة النشر"
         name: "year"
         widget: "number"
@@ -94,9 +106,12 @@ collections:
         widget: "select"
         default: "available"
         options:
-          - "available"
-          - "coming-soon"
-          - "unavailable"
+          - label: "متاح"
+            value: "available"
+          - label: "قريبًا"
+            value: "coming-soon"
+          - label: "غير متاح"
+            value: "unavailable"
       - label: "ISBN"
         name: "isbn"
         widget: "string"
