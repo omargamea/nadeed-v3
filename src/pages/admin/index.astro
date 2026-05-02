@@ -1,18 +1,18 @@
 ---
 ---
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>????? ????</title>
+  <title>إدارة نضيد</title>
   <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   <style>
     html, body {
       margin: 0;
       min-height: 100%;
-      direction: rtl;
+      direction: ltr;
       background: #f7f1e8;
       font-family: Tahoma, Arial, sans-serif;
     }
@@ -22,17 +22,26 @@
     }
 
     input, textarea, select {
-      direction: rtl;
-      text-align: right;
+      direction: rtl !important;
+      text-align: right !important;
+    }
+
+    textarea {
+      line-height: 1.8 !important;
+    }
+
+    label {
+      direction: rtl !important;
+      text-align: right !important;
     }
   </style>
 </head>
 <body>
   <script>
     document.documentElement.lang = "ar";
-    document.documentElement.dir = "rtl";
+    document.documentElement.dir = "ltr";
     document.addEventListener("DOMContentLoaded", function () {
-      document.body.dir = "rtl";
+      document.body.dir = "ltr";
     });
   </script>
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
