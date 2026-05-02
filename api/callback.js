@@ -30,16 +30,16 @@
     const tokenData = await tokenResponse.json();
 
     if (!tokenData.access_token) {
-      res.status(401).send(`GitHub OAuth failed: ${JSON.stringify(tokenData)}`);
+      res.status(401).send("GitHub OAuth failed: " + JSON.stringify(tokenData));
       return;
     }
 
-    const authContent = {
+    const authPayload = {
       token: tokenData.access_token,
       provider: "github"
     };
 
-    const successMessage = `authorization:github:success:${JSON.stringify(authContent)}`;
+    const authMessage = "authorization:github:success:" + JSON.stringify(authPayload);
 
     const lt = String.fromCharCode(60);
     const gt = String.fromCharCode(62);
@@ -52,33 +52,79 @@
       `${lt}title${gt}NADEED OAuth${lt}/title${gt}`,
       `${lt}/head${gt}`,
       `${lt}body${gt}`,
-      `${lt}p${gt}تم تسجيل الدخول. جار العودة إلى لوحة نضيد...${lt}/p${gt}`,
+      `${lt}p id="status"${gt}تم تسجيل الدخول. جار العودة إلى لوحة نضيد...${lt}/p${gt}`,
       `${lt}script${gt}`,
       `(function () {`,
-      `  const successMessage = ${JSON.stringify(successMessage)};`,
+      `  var authMessage = ${JSON.stringify(authMessage)};`,
+      `  var fallbackOrigin = "https://nadeed.vercel.app";`,
+      `  var attempts = 0;`,
+      `  var closed = false;`,
+      ``,
+      `  function setStatus(text) {`,
+      `    var el = document.getElementById("status");`,
+      `    if (el) {`,
+      `      el.textContent = text;`,
+      `    }`,
+      `  }`,
       ``,
       `  function sendSuccess(origin) {`,
-      `    if (!window.opener) return;`,
-      `    window.opener.postMessage(successMessage, origin || "*");`,
+      `    if (!window.opener) {`,
+      `      setStatus("تم تسجيل الدخول، لكن نافذة لوحة نضيد غير متاحة. أعد فتح لوحة الإدارة وحاول مرة واحدة.");`,
+      `      return false;`,
+      `    }`,
+      ``,
+      `    try {`,
+      `      window.opener.postMessage(authMessage, origin || fallbackOrigin);`,
+      `      return true;`,
+      `    } catch (error) {`,
+      `      try {`,
+      `        window.opener.postMessage(authMessage, "*");`,
+      `        return true;`,
+      `      } catch (innerError) {`,
+      `        return false;`,
+      `      }`,
+      `    }`,
+      `  }`,
+      ``,
+      `  function closeSoon() {`,
+      `    if (closed) {`,
+      `      return;`,
+      `    }`,
+      `    closed = true;`,
+      `    setTimeout(function () {`,
+      `      window.close();`,
+      `    }, 900);`,
       `  }`,
       ``,
       `  window.addEventListener("message", function (event) {`,
-      `    if (!event) return;`,
-      `    if (event.data === "authorizing:github") {`,
-      `      sendSuccess(event.origin);`,
-      `      setTimeout(function () { window.close(); }, 500);`,
+      `    if (!event) {`,
+      `      return;`,
       `    }`,
+      `    if (event.origin) {`,
+      `      fallbackOrigin = event.origin;`,
+      `    }`,
+      `    sendSuccess(fallbackOrigin);`,
+      `    closeSoon();`,
       `  }, false);`,
       ``,
-      `  if (window.opener) {`,
-      `    window.opener.postMessage("authorizing:github", "*");`,
-      `    sendSuccess("*");`,
+      `  function tick() {`,
+      `    attempts = attempts + 1;`,
+      ``,
+      `    if (window.opener) {`,
+      `      window.opener.postMessage("authorizing:github", "*");`,
+      `      sendSuccess(fallbackOrigin);`,
+      `      sendSuccess("*");`,
+      `    }`,
+      ``,
+      `    if (attempts === 16) {`,
+      `      closeSoon();`,
+      `      return;`,
+      `    }`,
+      ``,
+      `    setTimeout(tick, 250);`,
       `  }`,
       ``,
-      `  setTimeout(function () { sendSuccess("*"); }, 500);`,
-      `  setTimeout(function () { sendSuccess("*"); }, 1000);`,
-      `  setTimeout(function () { sendSuccess("*"); }, 1500);`,
-      `  setTimeout(function () { window.close(); }, 3000);`,
+      `  tick();`,
       `})();`,
       `${lt}/script${gt}`,
       `${lt}/body${gt}`,
@@ -86,8 +132,10 @@
     ].join("\n");
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cross-Origin-Opener-Policy", "unsafe-none");
+    res.setHeader("Cache-Control", "no-store");
     res.status(200).send(html);
   } catch (error) {
-    res.status(500).send(`OAuth callback error: ${error.message}`);
+    res.status(500).send("OAuth callback error: " + error.message);
   }
 }
