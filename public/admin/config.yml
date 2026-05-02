@@ -160,6 +160,10 @@ collections:
 
   - name: "magazine"
     label: "مجلة نضيد"
+    label_singular: "عدد"
+    identifier_field: "title"
+    summary: "{{title}} - العدد {{issueNumber}}"
+    sortable_fields: ["publishedAt", "issueNumber", "title"]
     folder: "src/content/magazine"
     create: true
     slug: "{{slug}}"
