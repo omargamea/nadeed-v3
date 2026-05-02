@@ -6,13 +6,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>إدارة نضيد</title>
+  <title>????? ????</title>
   <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
   <style>
-    :root {
-      color-scheme: light;
-    }
-
     html, body {
       margin: 0;
       min-height: 100%;
@@ -26,71 +22,8 @@
     }
 
     input, textarea, select {
-      direction: rtl !important;
-      text-align: right !important;
-    }
-
-    label,
-    [class*="Label"],
-    [class*="ControlLabel"],
-    [class*="FieldLabel"] {
-      direction: rtl !important;
-      text-align: right !important;
-      font-weight: 700 !important;
-    }
-
-    main,
-    [class*="CollectionMain"],
-    [class*="EditorContainer"],
-    [class*="EditorControlPane"],
-    [class*="EditorPreviewPane"] {
-      direction: rtl !important;
-    }
-
-    [class*="Sidebar"],
-    [class*="Nav"],
-    [class*="CollectionTop"],
-    [class*="CollectionContainer"] {
-      direction: rtl !important;
-      text-align: right !important;
-    }
-
-    [class*="EditorControlBar"],
-    [class*="Toolbar"],
-    [class*="EditorToolbar"] {
-      direction: rtl !important;
-    }
-
-    [class*="EditorContainer"] form,
-    [class*="ControlPane"] form {
-      max-width: 980px !important;
-      margin-right: auto !important;
-      margin-left: auto !important;
-    }
-
-    [class*="ControlPane"] {
-      background: #fbf7ef !important;
-    }
-
-    [class*="Widget"],
-    [class*="Control"] {
-      border-radius: 10px;
-    }
-
-    textarea {
-      min-height: 120px;
-      line-height: 1.9 !important;
-    }
-
-    button {
-      border-radius: 8px !important;
-    }
-
-    /* Keep Decap usable even when class names change between versions. */
-    [class*="Markdown"],
-    [class*="RichText"],
-    [class*="Editor"] {
       direction: rtl;
+      text-align: right;
     }
   </style>
 </head>
@@ -101,11 +34,6 @@
     document.addEventListener("DOMContentLoaded", function () {
       document.body.dir = "rtl";
     });
-    setInterval(function () {
-      document.documentElement.lang = "ar";
-      document.documentElement.dir = "rtl";
-      if (document.body) document.body.dir = "rtl";
-    }, 1000);
   </script>
   <script src="https://unpkg.com/decap-cms@^3.1.2/dist/decap-cms.js"></script>
 </body>
