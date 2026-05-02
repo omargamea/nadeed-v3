@@ -126,6 +126,10 @@ collections:
 
   - name: "authors"
     label: "المؤلفون"
+    label_singular: "مؤلف"
+    identifier_field: "name"
+    summary: "{{name}} - {{role}}"
+    sortable_fields: ["name", "role"]
     folder: "src/content/authors"
     create: true
     slug: "{{slug}}"
