@@ -34,11 +34,13 @@
       return;
     }
 
-    const content = {
-      token: tokenData.access_token
+    const authContent = {
+      token: tokenData.access_token,
+      provider: "github"
     };
 
-    const message = `authorization:github:success:${JSON.stringify(content)}`;
+    const primaryMessage = `authorization:github:success:${JSON.stringify(authContent)}`;
+    const secondaryMessage = `authorization:github:success:${JSON.stringify({ token: tokenData.access_token })}`;
 
     const lt = String.fromCharCode(60);
     const gt = String.fromCharCode(62);
@@ -54,14 +56,30 @@
       `${lt}p${gt}تم تسجيل الدخول. جار العودة إلى لوحة نضيد...${lt}/p${gt}`,
       `${lt}script${gt}`,
       `(function () {`,
-      `  const message = ${JSON.stringify(message)};`,
+      `  const primaryMessage = ${JSON.stringify(primaryMessage)};`,
+      `  const secondaryMessage = ${JSON.stringify(secondaryMessage)};`,
+      `  const targetOrigin = "https://nadeed.vercel.app";`,
+      ``,
+      `  function sendAuthMessages() {`,
+      `    if (window.opener) {`,
+      `      window.opener.postMessage(primaryMessage, targetOrigin);`,
+      `      window.opener.postMessage(primaryMessage, "*");`,
+      `      window.opener.postMessage(secondaryMessage, targetOrigin);`,
+      `      window.opener.postMessage(secondaryMessage, "*");`,
+      `    }`,
+      `  }`,
+      ``,
+      `  window.addEventListener("message", function () {`,
+      `    sendAuthMessages();`,
+      `  });`,
+      ``,
       `  let attempts = 0;`,
+      `  sendAuthMessages();`,
+      ``,
       `  const timer = setInterval(function () {`,
       `    attempts = attempts + 1;`,
-      `    if (window.opener) {`,
-      `      window.opener.postMessage(message, "*");`,
-      `    }`,
-      `    if (attempts >= 12) {`,
+      `    sendAuthMessages();`,
+      `    if (attempts >= 24) {`,
       `      clearInterval(timer);`,
       `      window.close();`,
       `    }`,
