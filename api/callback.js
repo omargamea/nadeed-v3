@@ -35,14 +35,14 @@
     }
 
     const content = {
-      token: tokenData.access_token,
-      provider: "github"
+      token: tokenData.access_token
     };
 
     const message = `authorization:github:success:${JSON.stringify(content)}`;
 
     const lt = String.fromCharCode(60);
     const gt = String.fromCharCode(62);
+
     const html = [
       `${lt}!doctype html${gt}`,
       `${lt}html lang="ar" dir="rtl"${gt}`,
@@ -51,14 +51,21 @@
       `${lt}title${gt}NADEED OAuth${lt}/title${gt}`,
       `${lt}/head${gt}`,
       `${lt}body${gt}`,
-      `${lt}p${gt}تم تسجيل الدخول. يمكنك إغلاق هذه النافذة إن لم تغلق تلقائيا.${lt}/p${gt}`,
+      `${lt}p${gt}تم تسجيل الدخول. جار العودة إلى لوحة نضيد...${lt}/p${gt}`,
       `${lt}script${gt}`,
       `(function () {`,
       `  const message = ${JSON.stringify(message)};`,
-      `  if (window.opener) {`,
-      `    window.opener.postMessage(message, "*");`,
-      `  }`,
-      `  window.close();`,
+      `  let attempts = 0;`,
+      `  const timer = setInterval(function () {`,
+      `    attempts = attempts + 1;`,
+      `    if (window.opener) {`,
+      `      window.opener.postMessage(message, "*");`,
+      `    }`,
+      `    if (attempts >= 12) {`,
+      `      clearInterval(timer);`,
+      `      window.close();`,
+      `    }`,
+      `  }, 250);`,
       `})();`,
       `${lt}/script${gt}`,
       `${lt}/body${gt}`,
