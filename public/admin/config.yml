@@ -3,7 +3,7 @@
   repo: "omargamea/nadeed"
   branch: "main"
   site_domain: "nadeed.vercel.app"
-  base_url: "https://nadeed.vercel.app/api"
+  base_url: "https://nadeed-oauth.vercel.app/api"
   auth_endpoint: "auth"
 media_folder: "public/uploads"
 public_folder: "/uploads"
@@ -162,6 +162,7 @@ collections:
       - label: "المحتوى"
         name: "body"
         widget: "markdown"
+
 
 
 
