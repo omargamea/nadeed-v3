@@ -16,7 +16,7 @@ const allMagazine = await getCollection('magazine', e => !e.data.draft);
 // Sort
 const latestArticles = allArticles
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
-  .slice(0, 6);
+  .slice(0, 3);
 
 const latestBooks = allBooks.slice(0, 4);
 const latestMagazine = allMagazine
