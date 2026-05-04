@@ -1,94 +1,80 @@
-// src/pages/sitemap.xml.ts
-// Sitemap توليد ديناميكي بدون مكتبة خارجية
-import type { APIRoute } from 'astro';
-import { getCollection } from 'astro:content';
+import type { APIRoute } from "astro";
+import { getCollection } from "astro:content";
+
+const lt = String.fromCharCode(60);
+const gt = String.fromCharCode(62);
+const amp = String.fromCharCode(38);
+
+function escapeXml(value: string): string {
+  return value
+    .split(amp).join(amp + "amp;")
+    .split(lt).join(amp + "lt;")
+    .split(gt).join(amp + "gt;")
+    .split(String.fromCharCode(34)).join(amp + "quot;")
+    .split(String.fromCharCode(39)).join(amp + "apos;");
+}
+
+function formatDate(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
 
 export const GET: APIRoute = async ({ site }) => {
-  const base = (site?.toString() ?? '').replace(/\/$/, '');
-
-  // Static pages
-  const staticPages = [
-    { url: '/', priority: '1.0', freq: 'weekly' },
-    { url: '/articles/', priority: '0.9', freq: 'weekly' },
-    { url: '/books/',    priority: '0.9', freq: 'weekly' },
-    { url: '/magazine/', priority: '0.8', freq: 'monthly' },
-    { url: '/authors/',  priority: '0.7', freq: 'monthly' },
-    { url: '/about/',    priority: '0.6', freq: 'yearly' },
-    { url: '/shuroot/',  priority: '0.6', freq: 'yearly' },
-    { url: '/contact/',  priority: '0.5', freq: 'yearly' },
-  ];
-
-  // Dynamic pages
-  const articles = await getCollection('articles', e => !e.data.draft);
-  const books    = await getCollection('books',    e => !e.data.draft);
-  const authors  = await getCollection('authors',  e => !e.data.draft);
-  const magazine = await getCollection('magazine', e => !e.data.draft);
-
-  const today = new Date().toISOString().split('T')[0];
+  const base = (site?.toString() || "https://nadeed.vercel.app").replace(/\/$/, "");
+  const today = formatDate(new Date());
 
   const rows: string[] = [];
 
-  // Static
-  for (const p of staticPages) {
-    rows.push(`  <url>
-    <loc>${base}${p.url}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>${p.freq}</changefreq>
-    <priority>${p.priority}</priority>
-  </url>`);
+  function addUrl(pathname: string, lastmod: string, changefreq: string, priority: string) {
+    const absoluteUrl = new URL(pathname, `${base}/`).href;
+    rows.push(`  ${lt}url${gt}
+    ${lt}loc${gt}${escapeXml(absoluteUrl)}${lt}/loc${gt}
+    ${lt}lastmod${gt}${lastmod}${lt}/lastmod${gt}
+    ${lt}changefreq${gt}${changefreq}${lt}/changefreq${gt}
+    ${lt}priority${gt}${priority}${lt}/priority${gt}
+  ${lt}/url${gt}`);
   }
 
-  // Articles
-  for (const a of articles) {
-    const lastmod = (a.data.updatedAt ?? a.data.publishedAt).toISOString().split('T')[0];
-    rows.push(`  <url>
-    <loc>${base}/articles/${a.slug}/</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>`);
+  addUrl("/", today, "weekly", "1.0");
+  addUrl("/articles/", today, "weekly", "0.9");
+  addUrl("/books/", today, "weekly", "0.9");
+  addUrl("/magazine/", today, "monthly", "0.8");
+  addUrl("/authors/", today, "monthly", "0.7");
+  addUrl("/about/", today, "yearly", "0.6");
+  addUrl("/shuroot/", today, "yearly", "0.6");
+  addUrl("/contact/", today, "yearly", "0.5");
+
+  const articles = await getCollection("articles", entry => !entry.data.draft);
+  const books = await getCollection("books", entry => !entry.data.draft);
+  const authors = await getCollection("authors", entry => !entry.data.draft);
+  const magazine = await getCollection("magazine", entry => !entry.data.draft);
+
+  for (const article of articles) {
+    const lastmod = formatDate(article.data.updatedAt ?? article.data.publishedAt);
+    addUrl(`/articles/${article.slug}/`, lastmod, "monthly", "0.8");
   }
 
-  // Books
-  for (const b of books) {
-    rows.push(`  <url>
-    <loc>${base}/books/${b.slug}/</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>`);
+  for (const book of books) {
+    addUrl(`/books/${book.slug}/`, today, "monthly", "0.8");
   }
 
-  // Authors
-  for (const au of authors) {
-    rows.push(`  <url>
-    <loc>${base}/authors/${au.slug}/</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`);
+  for (const author of authors) {
+    addUrl(`/authors/${author.slug}/`, today, "monthly", "0.7");
   }
 
-  // Magazine
-  for (const m of magazine) {
-    const lastmod = m.data.publishedAt.toISOString().split('T')[0];
-    rows.push(`  <url>
-    <loc>${base}/magazine/${m.slug}/</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`);
+  for (const issue of magazine) {
+    const lastmod = formatDate(issue.data.publishedAt);
+    addUrl(`/magazine/${issue.slug}/`, lastmod, "monthly", "0.7");
   }
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${rows.join('\n')}
-</urlset>`;
+  const xml = `${lt}?xml version="1.0" encoding="UTF-8"?${gt}
+${lt}urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"${gt}
+${rows.join("\n")}
+${lt}/urlset${gt}`;
 
   return new Response(xml, {
     headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600',
-    },
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600"
+    }
   });
 };
